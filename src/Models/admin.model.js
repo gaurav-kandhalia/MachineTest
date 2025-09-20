@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const adminModel = mongoose.Schema({
+const adminSchema = mongoose.Schema({
    email:{
     type:String,
     required:true,
@@ -23,17 +23,17 @@ const adminModel = mongoose.Schema({
 }
 )
 
-adminModel.pre("save",async function(next){
+adminSchema.pre("save",async function(next){
     if(!this.isModified("password")) return next();
     this.password = await bcrypt.hash(this.password,10);
     next();
 })
 
-adminModel.methods.comparePassword = async function(password) {
+adminSchema.methods.comparePassword = async function(password) {
     return await bcrypt.compare(password,this.password);
 }
 
-adminModel.methods.generateAccessToken = function(){
+adminSchema.methods.generateAccessToken = function(){
     
             
     return jwt.sign(
@@ -48,7 +48,7 @@ adminModel.methods.generateAccessToken = function(){
     )
 }
 
-adminModel.methods.generateRefreshToken = function(){
+adminSchema.methods.generateRefreshToken = function(){
     return jwt.sign(
         {
             _id:this._id,
@@ -62,7 +62,7 @@ adminModel.methods.generateRefreshToken = function(){
 }
 
 
-const Admin = mongoose.model("Admin",adminModel)
+const Admin = mongoose.model("Admin",adminSchema)
 
 export default Admin
    
