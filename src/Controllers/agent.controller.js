@@ -10,11 +10,13 @@ import Item from "../Models/item.model.js";
 
 
 export const getAgentItems = asyncHandler(async(req,res)=>{
-    const {agentId} = req.params;
+    const agentId = req.query.agentId;
+    console.log("agentId...",agentId)
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 50;
     const skip = (page - 1) * limit;
     const agent = await Agent.findById(agentId);
+    console.log("agent.......")
     if(!agent){
         throw new ApiError(404,"Agent not found",false)
     }

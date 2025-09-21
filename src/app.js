@@ -3,7 +3,7 @@ import morgan from 'morgan'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import adminRouter from './Routes/admin.router.js'
-import Agent from './Models/agent.model.js'
+import agentRouter from './Routes/agent.router.js'
 
 const app = express()
 
@@ -20,6 +20,7 @@ app.use(express.urlencoded({
 }))
 
 app.use("/api/v1/admin",adminRouter)
+app.use("/api/v1/agent",agentRouter)
 
 app.get("/",(_,res)=>{
     res.send("API is working")
