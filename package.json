@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "nodemon -r dotenv/config --experimental-json-modules src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-     "seed": "node src/seeds/admin.seed.js"
+    "seed": "node src/seeds/admin.seed.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

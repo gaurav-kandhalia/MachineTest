@@ -5,7 +5,7 @@ import Admin from "../Models/admin.model.js";
 import { adminLoginSchema } from "../Validations/auth.validation.js";
 
 const generateAccessandRefreshTokens = async(AdminId)=>{
-    console.log(".........................................................")
+    
      const admin = await Admin.findById(AdminId);
 
    const accessToken =admin.generateAccessToken();

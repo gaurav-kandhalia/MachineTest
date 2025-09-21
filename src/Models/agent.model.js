@@ -1,30 +1,31 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
-const agentModel = mongoose.Schema({
-    Name:{
+const agentSchema = mongoose.Schema({
+    name:{
         type:String,
         required:true,
         trim:true,
         lowercase:true
     },
-    Email:{
+    email:{
         type:String,
         required:true,
         trim:true,
         unique:true
     },
-    Phone:{
+    phoneNumber:{
         type:String,
         required:true,
         trim:true,
         unique:true
 
     },
-    Password:{
+    password:{
         type:String,
         required:true,
     },
-    Role:{
+    role:{
         type:String,
         default:"agent"
     }
@@ -34,6 +35,16 @@ const agentModel = mongoose.Schema({
 }
 )
 
-const Agent = mongoose.model("Agent",agentModel)
+agentSchema.pre("save",async function(next){
+    if(!this.isModified("password")) return next();
+    this.password = await bcrypt.hash(this.password,10);
+    next();
+})
+
+agentSchema.methods.comparePassword = async function(password) {
+    return await bcrypt.compare(password,this.password);
+}
+
+const Agent = mongoose.model("Agent",agentSchema)
 
 export default Agent

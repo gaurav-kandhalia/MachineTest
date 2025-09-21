@@ -3,6 +3,7 @@ import morgan from 'morgan'
 import cors from 'cors'
 import cookieParser from 'cookie-parser'
 import adminRouter from './Routes/admin.router.js'
+import Agent from './Models/agent.model.js'
 
 const app = express()
 
@@ -23,6 +24,11 @@ app.use("/api/v1/admin",adminRouter)
 app.get("/",(_,res)=>{
     res.send("API is working")
 })
+
+
+
+
+
 
 
 export default app
