@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { number } from "zod";
 
 const itemSchema = new mongoose.Schema({
-    name: {
+    firstName: {
         type: String,
         required: true,
         trim: true,
