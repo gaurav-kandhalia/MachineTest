@@ -127,46 +127,88 @@ const agents = await Agent.find().sort({ createdAt: 1 }).limit(5);
 });
 
 
-export const getDistributedItems = asyncHandler(async (req, res) => {
+// export const getDistributedItems = asyncHandler(async (req, res) => {
 
+//   const page = parseInt(req.query.page) || 1;       
+//   const limit = parseInt(req.query.limit) || 50;    
+//   const skip = (page - 1) * limit;
+
+  
+//   const [items, totalCount] = await Promise.all([
+//     Item.find().skip(skip).limit(limit),
+//     Item.countDocuments()
+//   ]);
+//   console.log(items.length);
+//   if(!items){
+//     throw new ApiError(400,"something went wrong",false)
+//   }
+
+//   if (items.length === 0) {
+//     return res.status(200).json(
+//       new ApiResponse(200, null, "No items are distributed", true)
+//     );
+//   }else{
+
+//       return res.status(200).json(
+//     new ApiResponse(200, {
+//       items,
+//       pagination: {
+//         totalItems: totalCount,
+//         totalPages: Math.ceil(totalCount / limit),
+//         currentPage: page,
+//         pageSize: limit,
+//         hasNextPage: page * limit < totalCount,
+//         hasPrevPage: page > 1
+//       }
+//     }, "Distributed items fetched successfully", true)
+//   );
+//   }
+
+
+// });
+
+export const getDistributedItems = asyncHandler(async (req, res) => {
   const page = parseInt(req.query.page) || 1;       
   const limit = parseInt(req.query.limit) || 50;    
   const skip = (page - 1) * limit;
 
-  
   const [items, totalCount] = await Promise.all([
-    Item.find().skip(skip).limit(limit),
+    Item.find()
+      .skip(skip)
+      .limit(limit)
+      .populate("agentId", "name email phoneNumber"),  
     Item.countDocuments()
   ]);
-  console.log(items.length);
-  if(!items){
-    throw new ApiError(400,"something went wrong",false)
+
+  if (!items) {
+    throw new ApiError(400, "Something went wrong", false);
   }
 
   if (items.length === 0) {
     return res.status(200).json(
       new ApiResponse(200, null, "No items are distributed", true)
     );
-  }else{
-
-      return res.status(200).json(
-    new ApiResponse(200, {
-      items,
-      pagination: {
-        totalItems: totalCount,
-        totalPages: Math.ceil(totalCount / limit),
-        currentPage: page,
-        pageSize: limit,
-        hasNextPage: page * limit < totalCount,
-        hasPrevPage: page > 1
-      }
-    }, "Distributed items fetched successfully", true)
-  );
   }
 
-
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      {
+        items,
+        pagination: {
+          totalItems: totalCount,
+          totalPages: Math.ceil(totalCount / limit),
+          currentPage: page,
+          pageSize: limit,
+          hasNextPage: page * limit < totalCount,
+          hasPrevPage: page > 1,
+        },
+      },
+      "Distributed items fetched successfully",
+      true
+    )
+  );
 });
-
 
 
 

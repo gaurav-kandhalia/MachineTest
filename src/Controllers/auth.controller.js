@@ -20,6 +20,7 @@ const generateAccessandRefreshTokens = async(AdminId)=>{
 }
 
 export const login = asyncHandler(async (req, res) => {
+    console.log("login route ")
    
     const validatedData = adminLoginSchema.parse(req.body);
      
